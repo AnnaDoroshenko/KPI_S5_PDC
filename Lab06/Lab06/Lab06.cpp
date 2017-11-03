@@ -1,3 +1,6 @@
+//call in cmd, path of Debug folder
+//mpiexec -n[amount of threads] Lab06.exe
+
 /**
 * Parallel and distributed computing
 * Lab 6. Processes in MPI
@@ -65,8 +68,6 @@ int main(int args, char* argv[]) {
 
 	MPI_Finalize();
 
-	std::cin.get();
-	std::cin.get();
 	return 0;
 }
 
