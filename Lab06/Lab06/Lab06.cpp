@@ -20,7 +20,7 @@
 typedef std::vector <int> Vector;
 typedef std::vector < std::vector <int>> Matrix;
 
-int N;
+int N = 4;
 
 void T1();
 void T2();
@@ -48,10 +48,6 @@ int main(int args, char* argv[]) {
 
 	int rank;
 
-	std::cout << "Lab05 started" << std::endl;
-	std::cout << "Input n: " << std::endl;
-	std::cin >> N;
-
 	MPI_Init(&args, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -69,7 +65,6 @@ int main(int args, char* argv[]) {
 
 	MPI_Finalize();
 
-	std::cout << "Lab05 finished" << std::endl;
 	std::cin.get();
 	std::cin.get();
 	return 0;
@@ -86,7 +81,6 @@ void T1()
 	Matrix ma;
 	Matrix md;
 
-#pragma omp critical(criticalSection)
 	std::cout << "Thread 1 started" << std::endl;
 
 	a = oneVector();
@@ -95,8 +89,6 @@ void T1()
 	ma = oneMatrix();
 	md = oneMatrix();
 
-	//#pragma omp critical(criticalSection)
-	//{
 	//	std::cout << "a: ";
 	//	a = inputVector();
 	//	std::cout << "b: ";
@@ -107,18 +99,14 @@ void T1()
 	//	ma = inputMatrix();
 	//	std::cout << "mb: ";
 	//	md = inputMatrix();
-	//}
 
 	d = func1(a, b, c, ma, md);
 	Sleep(8000);
 	if (N <= 10)
 	{
-#pragma omp critical(criticalSection)
-		{
 			std::cout << "d = ";
 			outputVector(d);
 		}
-	}
 	std::cout << "Thread 1 finished" << std::endl;
 }
 
@@ -131,33 +119,26 @@ void T2()
 	Matrix mk;
 	Matrix mf;
 
-#pragma omp critical(criticalSection)
 	std::cout << "Thread 2 started" << std::endl;
 
 	mg = oneMatrix();
 	mh = oneMatrix();
 	mk = oneMatrix();
 
-	//#pragma omp critical(criticalSection)
-	//{
 	//	std::cout << "mg: ";
 	//	mg = inputMatrix();
 	//	std::cout << "mh: ";
 	//	mh = inputMatrix();
 	//	std::cout << "mk: ";
 	//	mk = inputMatrix();
-	//}
 
 	mf = func2(mg, mh, mk);
 	Sleep(3000);
 	if (N <= 10)
-	{
-#pragma omp critical(criticalSection)
 		{
 			std::cout << "mf = ";
 			outputMatrix(mf);
 		}
-	}
 	std::cout << "Thread 2 finished" << std::endl;
 }
 
@@ -171,7 +152,6 @@ void T3()
 	Matrix mp;
 	Matrix mr;
 
-#pragma omp critical(criticalSection)
 	std::cout << "Thread 3 started" << std::endl;
 
 	s = oneVector();
@@ -179,8 +159,6 @@ void T3()
 	mp = oneMatrix();
 	mr = oneMatrix();
 
-	//#pragma omp critical(criticalSection)
-	//{
 	//	std::cout << "s: ";
 	//	s = inputVector();
 	//	std::cout << "mo: ");
@@ -189,19 +167,14 @@ void T3()
 	//	mp = inputMatrix();
 	//	std::cout << "mr: ");
 	//	mr = inputMatrix();
-	//}
 
 	t = func3(mo, mp, s, mr);
 	Sleep(2500);
 	if (N <= 10)
 	{
-#pragma omp critical(criticalSection)
-		{
 			std::cout << "t = ";
 			outputVector(t);
 		}
-
-	}
 	std::cout << "Thread 3 finished" << std::endl;
 }
 
@@ -209,7 +182,6 @@ void T3()
 Vector addVectors(Vector a, Vector b)
 {
 	Vector res(N);
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		res[i] = a[i] + b[i];
@@ -220,7 +192,6 @@ Vector addVectors(Vector a, Vector b)
 int minElemVect(Vector a)
 {
 	int minElem = a[0];
-#pragma omp parallel for
 	for (int i = 1; i < N; i++)
 	{
 		if (a[i] < minElem)
@@ -235,7 +206,6 @@ Matrix multMatrix(Matrix ma, Matrix mb)
 {
 	int current;
 	Matrix resMatrix(N);
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		//resMatrix[i] = std::vector<int>(N);
@@ -256,7 +226,6 @@ Matrix multMatrix(Matrix ma, Matrix mb)
 Vector multScalarVect(int scalar, Vector a)
 {
 	Vector resVect(N);
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		resVect[i] = scalar * a[i];
@@ -268,7 +237,6 @@ Vector multVectMatrix(Vector a, Matrix ma)
 {
 	int current;
 	Vector resVect(N);
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		current = 0;
@@ -284,7 +252,6 @@ Vector multVectMatrix(Vector a, Matrix ma)
 int maxElemMatrix(Matrix ma)
 {
 	int maxElem = ma[0][0];
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
@@ -301,7 +268,6 @@ int maxElemMatrix(Matrix ma)
 Matrix multScalarMatrix(int scalar, Matrix matrixA)
 {
 	Matrix resMatrix(N);
-#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
 		resMatrix[i] = std::vector<int>(N);
