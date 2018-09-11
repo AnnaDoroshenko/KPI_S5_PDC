@@ -2,7 +2,13 @@ Lab_1/
 Lab_2/
 Lab_3/
 Lab_4/
+Lab_5/
+Lab_6/
+Lab3/
 Protocols/
+
+*.gitattributes
+*.rar
 
 **/obj/**
 *.gpr
